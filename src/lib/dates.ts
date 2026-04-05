@@ -5,7 +5,7 @@ export function formatDate(date: Date | string): string {
 }
 
 export function formatMonthYear(date: Date): string {
-  return format(date, "yyyy년 M월");
+  return format(date, "yyyy\ub144 M\uc6d4");
 }
 
 export function getMonthRange(date: Date): { start: string; end: string } {
