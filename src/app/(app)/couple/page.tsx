@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { generateInviteCode } from "@/lib/invite-code";
-import InviteCodeDisplay from "@/components/couple/InviteCodeDisplay";
 import Link from "next/link";
 import type { Couple } from "@/types";
 
@@ -78,7 +77,7 @@ export default function CouplePage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+        <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -102,7 +101,10 @@ export default function CouplePage() {
           )}
         </div>
 
-        <InviteCodeDisplay code={couple.invite_code} />
+        <div className="bg-white/30 backdrop-blur-md border border-white/40 rounded-[18px] p-4 text-center">
+          <p className="text-xs text-text-muted mb-1">Invite Code</p>
+          <p className="text-2xl font-mono font-extrabold text-primary tracking-[0.15em]">{couple.invite_code}</p>
+        </div>
 
         {couple.user2_id && (
           <Link

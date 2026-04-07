@@ -1,20 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Nanum+Gothic:wght@400;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   body {
-    @apply bg-background text-text-primary antialiased;
+    @apply text-text-primary antialiased;
+    min-height: 100vh;
+    background:
+      linear-gradient(160deg,
+        #FFF0F3 0%,
+        #FDE8F0 15%,
+        #F5E6FA 35%,
+        #EDE8FF 55%,
+        #E8EEFF 75%,
+        #F0F4FF 100%
+      );
+    background-attachment: fixed;
   }
 
   ::-webkit-scrollbar {
-    width: 6px;
+    width: 3px;
   }
   ::-webkit-scrollbar-track {
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: #3d352e;
-    border-radius: 3px;
+    background: #D8C8E0;
+    border-radius: 10px;
   }
 }

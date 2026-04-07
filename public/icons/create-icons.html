@@ -1,0 +1,18 @@
+<canvas id="c" width="512" height="512"></canvas>
+<script>
+const c = document.getElementById('c');
+const ctx = c.getContext('2d');
+// Pink gradient background
+const g = ctx.createLinearGradient(0,0,512,512);
+g.addColorStop(0,'#FF8BA7');
+g.addColorStop(1,'#FF6B8A');
+ctx.fillStyle = g;
+ctx.beginPath();
+ctx.roundRect(0,0,512,512,100);
+ctx.fill();
+// Heart emoji
+ctx.font = '240px serif';
+ctx.textAlign = 'center';
+ctx.textBaseline = 'middle';
+ctx.fillText('💕', 256, 270);
+</script>

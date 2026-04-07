@@ -234,3 +234,145 @@ returns table (
   group by p.capture_date
   order by p.capture_date;
 $$ language sql security definer;
+
+-- ============================================
+-- EVENTS (Couple Schedule Sharing)
+-- ============================================
+
+create table public.events (
+  id uuid default uuid_generate_v4() primary key,
+  couple_id uuid references public.couples(id) on delete cascade not null,
+  title text not null,
+  event_date date not null,
+  start_time time,
+  end_time time,
+  color text default '#6C63FF',
+  created_by uuid references auth.users(id) on delete set null,
+  created_at timestamptz default now()
+);
+
+create index idx_events_couple_date on public.events(couple_id, event_date);
+
+alter table public.events enable row level security;
+
+create policy "Couple members can view events"
+  on public.events for select
+  using (
+    couple_id in (
+      select id from public.couples
+      where user1_id = auth.uid() or user2_id = auth.uid()
+    )
+  );
+
+create policy "Couple members can insert events"
+  on public.events for insert
+  with check (
+    couple_id in (
+      select id from public.couples
+      where user1_id = auth.uid() or user2_id = auth.uid()
+    )
+  );
+
+create policy "Couple members can update events"
+  on public.events for update
+  using (
+    couple_id in (
+      select id from public.couples
+      where user1_id = auth.uid() or user2_id = auth.uid()
+    )
+  );
+
+create policy "Couple members can delete events"
+  on public.events for delete
+  using (
+    couple_id in (
+      select id from public.couples
+      where user1_id = auth.uid() or user2_id = auth.uid()
+    )
+  );
+
+-- ============================================
+-- PLACES (Where we went)
+-- ============================================
+
+create table public.places (
+  id uuid default uuid_generate_v4() primary key,
+  couple_id uuid references public.couples(id) on delete cascade not null,
+  visit_date date not null,
+  name text not null,
+  category text not null default 'etc',
+  note text,
+  created_by uuid references auth.users(id) on delete set null,
+  created_at timestamptz default now()
+);
+
+create index idx_places_couple_date on public.places(couple_id, visit_date);
+
+alter table public.places enable row level security;
+
+create policy "Couple members can view places"
+  on public.places for select
+  using (
+    couple_id in (
+      select id from public.couples
+      where user1_id = auth.uid() or user2_id = auth.uid()
+    )
+  );
+
+create policy "Couple members can insert places"
+  on public.places for insert
+  with check (
+    couple_id in (
+      select id from public.couples
+      where user1_id = auth.uid() or user2_id = auth.uid()
+    )
+  );
+
+create policy "Couple members can update places"
+  on public.places for update
+  using (
+    couple_id in (
+      select id from public.couples
+      where user1_id = auth.uid() or user2_id = auth.uid()
+    )
+  );
+
+create policy "Couple members can delete places"
+  on public.places for delete
+  using (
+    couple_id in (
+      select id from public.couples
+      where user1_id = auth.uid() or user2_id = auth.uid()
+    )
+  );
+
+-- ============================================
+-- DATE FLAGS (met, loved, etc.)
+-- ============================================
+
+create table public.date_flags (
+  id uuid default uuid_generate_v4() primary key,
+  couple_id uuid references public.couples(id) on delete cascade not null,
+  flag_date date not null,
+  met boolean default false,
+  loved boolean default false,
+  updated_by uuid references auth.users(id),
+  updated_at timestamptz default now(),
+  unique(couple_id, flag_date)
+);
+
+create index idx_date_flags_couple_date on public.date_flags(couple_id, flag_date);
+
+alter table public.date_flags enable row level security;
+
+create policy "Couple members can view date_flags"
+  on public.date_flags for select
+  using (couple_id in (select id from public.couples where user1_id = auth.uid() or user2_id = auth.uid()));
+
+create policy "Couple members can insert date_flags"
+  on public.date_flags for insert
+  with check (couple_id in (select id from public.couples where user1_id = auth.uid() or user2_id = auth.uid()));
+
+create policy "Couple members can update date_flags"
+  on public.date_flags for update
+  using (couple_id in (select id from public.couples where user1_id = auth.uid() or user2_id = auth.uid()));

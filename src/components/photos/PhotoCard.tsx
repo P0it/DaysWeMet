@@ -1,22 +1,10 @@
 "use client";
 
-interface PhotoCardProps {
-  thumbnailUrl: string;
-  onClick: () => void;
-}
-
-export default function PhotoCard({ thumbnailUrl, onClick }: PhotoCardProps) {
+export default function PhotoCard({ thumbnailUrl, onClick }: { thumbnailUrl: string; onClick: () => void }) {
   return (
-    <button
-      onClick={onClick}
-      className="relative aspect-square rounded-cell overflow-hidden group"
-    >
+    <button onClick={onClick} className="relative aspect-square rounded-[14px] overflow-hidden active:scale-95 transition-transform bg-background">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={thumbnailUrl}
-        alt=""
-        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-      />
+      <img src={thumbnailUrl} alt="" className="w-full h-full object-cover" />
     </button>
   );
 }
